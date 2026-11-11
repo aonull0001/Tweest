@@ -571,17 +571,23 @@ let userAns;
 let isCorrect;
 if (isReorderType(q.type)) {
   const tokens = getReorderChoices(q);
-  if (selectedChoiceIndices.length !== tokens.length) {
-    alert('すべての語句を選んでください。');
+  const allowedLengths = q.type === '部分並び替え'
+    ? [q.choice.length]
+    : [q.answer.length].concat((q.acceptedAnswerSequences || []).map(sequence => sequence.length));
+  if (!allowedLengths.includes(selectedChoiceIndices.length)) {
+    alert('正しい英文になるように、必要な語句をすべて選んでください。');
     return;
   }
   userAns = selectedChoiceIndices.map(index => tokens[index]);
   if (q.type === '部分並び替え') {
-    isCorrect = normalizeAnswer(userAns.join(' ')) === normalizeAnswer(q.answer);
+    const acceptedAnswers = [q.answer].concat(q.acceptedAnswers || []);
+    isCorrect = acceptedAnswers.some(answer => normalizeAnswer(userAns.join(' ')) === normalizeAnswer(answer));
   } else if (Array.isArray(q.answer) && q.answer.every(Number.isInteger) && q.answer.length > 0) {
-    isCorrect = selectedChoiceIndices.length === q.answer.length && selectedChoiceIndices.every((index, position) => index === q.answer[position]);
+    const acceptedSequences = [q.answer].concat(q.acceptedAnswerSequences || []);
+    isCorrect = acceptedSequences.some(sequence => sequence.length === selectedChoiceIndices.length && selectedChoiceIndices.every((index, position) => index === sequence[position]));
   } else {
-    isCorrect = normalizeAnswer(userAns.join(' ')) === normalizeAnswer(getAnswerDisplay(q));
+    const acceptedAnswers = [getAnswerDisplay(q)].concat(q.acceptedAnswerDisplays || []);
+    isCorrect = acceptedAnswers.some(answer => normalizeAnswer(userAns.join(' ')) === normalizeAnswer(answer));
   }
 } else if (q.type === '2択' || q.type === '3択') {
   if (!selectedChoice) {
@@ -589,7 +595,8 @@ if (isReorderType(q.type)) {
     return;
   }
   userAns = selectedChoice;
-  isCorrect = normalizeAnswer(userAns) === normalizeAnswer(q.answer);
+  const acceptedAnswers = [q.answer].concat(q.acceptedAnswers || []);
+  isCorrect = acceptedAnswers.some(answer => normalizeAnswer(userAns) === normalizeAnswer(answer));
 } else {
   const input = document.getElementById('text-answer-input');
   userAns = input ? input.value.trim() : '';
@@ -613,7 +620,8 @@ isCorrect: isCorrect
 if (q.type === '2択' || q.type === '3択') {
   document.querySelectorAll('.choice-btn').forEach(btn => {
     btn.disabled = true;
-    if (normalizeAnswer(btn.textContent) === normalizeAnswer(q.answer)) btn.classList.add('correct');
+    const acceptedAnswers = [q.answer].concat(q.acceptedAnswers || []);
+    if (acceptedAnswers.some(answer => normalizeAnswer(btn.textContent) === normalizeAnswer(answer))) btn.classList.add('correct');
     else if (btn.textContent === userAns) btn.classList.add('wrong');
   });
 } else if (isReorderType(q.type)) {
@@ -690,7 +698,10 @@ function isReorderType(type) {
 return type === '部分並び替え' || type === '全文並び替え' || type === '並び替え';
 }
 function getReorderChoices(question) {
-if (Array.isArray(question.choice) && question.choice.length > 0) return question.choice;
+if (Array.isArray(question.choice) && question.choice.length > 0) {
+  const alternateChoices = question.type === '部分並び替え' ? (question.acceptedChoiceSets || []).flat() : [];
+  return question.choice.concat(alternateChoices);
+}
 const match = question.question.match(/\(([^()]*)\)/);
 return match ? match[1].split('/').map(token => token.trim()).filter(Boolean) : [];
 }
@@ -702,27 +713,48 @@ if (!question || !question.q_id || !supportedTypes.includes(question.type) || ty
 if (!Array.isArray(question.choice) || typeof question.unit !== 'string' || !Number.isInteger(question.starCount) || question.starCount < 1 || question.starCount > 5 || typeof question.answer !== 'string' && !Array.isArray(question.answer)) {
   return `問題 ${question.q_id} の choice、unit、難易度、answer を確認してください。`;
 }
-if ((question.type === '2択' && question.choice.length !== 2) || (question.type === '3択' && question.choice.length !== 3) || ((question.type === '2択' || question.type === '3択') && !question.choice.includes(question.answer))) {
-  return `問題 ${question.q_id} の選択肢数または正解を確認してください。`;
+if (question.type === '2択' || question.type === '3択') {
+  const correctChoices = [question.answer].concat(question.acceptedAnswers || []);
+  if ((question.type === '2択' && question.choice.length !== 2) || (question.type === '3択' && question.choice.length !== 3) || correctChoices.some(answer => !question.choice.includes(answer))) {
+    return `問題 ${question.q_id} の選択肢数または正解を確認してください。`;
+  }
 }
 if (question.type === '部分並び替え') {
   const choiceWords = question.choice.flatMap(token => normalizeAnswer(token).split(' ')).sort().join(' ');
   const answerWords = typeof question.answer === 'string' ? normalizeAnswer(question.answer).split(' ').sort().join(' ') : '';
-  if (!question.choice.length || !answerWords || choiceWords !== answerWords) {
+  const acceptedAnswers = [question.answer].concat(question.acceptedAnswers || []);
+  const acceptedChoiceSets = question.acceptedChoiceSets || [];
+  const validChoiceSets = acceptedChoiceSets.length === acceptedAnswers.length - 1 && acceptedChoiceSets.every((choiceSet, index) => Array.isArray(choiceSet) && choiceSet.length === question.choice.length && choiceSet.flatMap(token => normalizeAnswer(token).split(' ')).sort().join(' ') === normalizeAnswer(acceptedAnswers[index + 1]).split(' ').sort().join(' '));
+  const validAcceptedAnswers = acceptedAnswers.every((answer, index) => {
+    const acceptedWords = typeof answer === 'string' ? normalizeAnswer(answer).split(' ').sort().join(' ') : '';
+    const expectedWords = index === 0 || !acceptedChoiceSets[index - 1]
+      ? choiceWords
+      : acceptedChoiceSets[index - 1].flatMap(token => normalizeAnswer(token).split(' ')).sort().join(' ');
+    return acceptedWords && acceptedWords === expectedWords;
+  });
+  if (!question.choice.length || !answerWords || choiceWords !== answerWords || !validAcceptedAnswers || !validChoiceSets) {
     return `問題 ${question.q_id} の並び替え語句または正解を確認してください。`;
   }
 }
 if (question.type === '全文並び替え' || question.type === '並び替え') {
   const tokens = getReorderChoices(question);
-  const answerDisplay = getAnswerDisplay(question);
+  const answerDisplay = getPrimaryAnswerDisplay(question);
   if (!tokens.length || typeof answerDisplay !== 'string' || !answerDisplay.trim()) {
     return `問題 ${question.q_id} の全文並び替えデータを確認してください。`;
   }
   if (Array.isArray(question.answer) && question.answer.length > 0) {
     if (question.answer.every(Number.isInteger)) {
-      const validIndices = question.answer.length === tokens.length && new Set(question.answer).size === tokens.length && question.answer.every(index => index >= 0 && index < tokens.length);
-      if (!validIndices || normalizeAnswer(question.answer.map(index => tokens[index]).join(' ')) !== normalizeAnswer(answerDisplay)) {
+      const validIndices = sequence => Array.isArray(sequence) && sequence.length > 0 && new Set(sequence).size === sequence.length && sequence.every(index => Number.isInteger(index) && index >= 0 && index < tokens.length);
+      const sequences = [question.answer].concat(question.acceptedAnswerSequences || []);
+      if (sequences.some(sequence => !validIndices(sequence))) {
+        return `問題 ${question.q_id} の並び順を確認してください。`;
+      }
+      if (normalizeAnswer(question.answer.map(index => tokens[index]).join(' ')) !== normalizeAnswer(answerDisplay)) {
         return `問題 ${question.q_id} の並び順または正解表示を確認してください。`;
+      }
+      const answerDisplays = question.acceptedAnswerDisplays || [];
+      if (answerDisplays.length !== sequences.length - 1 || answerDisplays.some((display, index) => normalizeAnswer(sequences[index + 1].map(tokenIndex => tokens[tokenIndex]).join(' ')) !== normalizeAnswer(display))) {
+        return `問題 ${question.q_id} の別解表示を確認してください。`;
       }
     } else if (normalizeAnswer(question.answer.join(' ')) !== normalizeAnswer(answerDisplay)) {
       return `問題 ${question.q_id} の並び順または正解表示を確認してください。`;
@@ -730,6 +762,9 @@ if (question.type === '全文並び替え' || question.type === '並び替え') 
   } else {
     return `問題 ${question.q_id} の並び替え順を answer に設定してください。`;
   }
+}
+if (question.acceptedAnswers && (!Array.isArray(question.acceptedAnswers) || question.acceptedAnswers.some(answer => typeof answer !== 'string' || !answer.trim()))) {
+  return `問題 ${question.q_id} の別解を確認してください。`;
 }
 if (question.type !== '2択' && question.type !== '3択' && question.type !== '部分並び替え' && question.type !== '全文並び替え' && question.type !== '並び替え' && (typeof question.answer !== 'string' || !question.answer.trim())) {
   return `問題 ${question.q_id} の正解を確認してください。`;
@@ -739,14 +774,19 @@ return '';
 function normalizeAnswer(answer) {
 return String(answer).trim().toLowerCase().replace(/[.!?。！？]/g, '').replace(/\s+/g, ' ');
 }
-function getAnswerDisplay(question) {
+function getPrimaryAnswerDisplay(question) {
 if (question.answerDisplay) return question.answerDisplay;
 if (isReorderType(question.type) && Array.isArray(question.answer) && question.answer.every(Number.isInteger)) {
   return question.answer.map(index => getReorderChoices(question)[index]).join(' ');
 }
 if (Array.isArray(question.answer)) return question.answer.join(' ');
-if (question.acceptedAnswers) return question.acceptedAnswers.join(' / ');
 return String(question.answer);
+}
+function getAnswerDisplay(question) {
+const answerDisplays = [getPrimaryAnswerDisplay(question)];
+if (question.acceptedAnswerDisplays) answerDisplays.push(...question.acceptedAnswerDisplays);
+else if (question.acceptedAnswers) answerDisplays.push(...question.acceptedAnswers);
+return answerDisplays.join(' / ');
 }
 function formatUserAnswer(question, answer) {
 if (!Array.isArray(answer)) return String(answer);

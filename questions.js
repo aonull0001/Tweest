@@ -224,14 +224,15 @@ window.QUIZ_DATA = [
     },
     {
         q_id: '21',
-        type: '2択',
+        type: '3択',
         question: '次の（　）に入る最も適切な語を選べ。\nThe book (　) is on the desk is mine.',
-        choice: ['that', 'who'],
+        choice: ['that', 'who', 'which'],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['which'],
+        unit: 'U4-1',
         starCount: 1,
         star: '★☆☆☆☆',
-        explanation: 'book は物なので that が使えます。'
+        explanation: 'book は物なので which または that を使えます。'
     },
     {
         q_id: '22',
@@ -239,21 +240,23 @@ window.QUIZ_DATA = [
         question: '空欄に適切な語を書け。\nThe car (　) was made in Germany is expensive.',
         choice: [],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['which'],
+        unit: 'U4-1',
         starCount: 1,
         star: '★☆☆☆☆',
-        explanation: 'car を後ろから説明している関係代名詞です。'
+        explanation: 'car は物なので which または that を使えます。'
     },
     {
         q_id: '23',
         type: '3択',
         question: '次の（　）に入る最も適切な語を選べ。\nThe student (　) studies the hardest got the prize.',
-        choice: ['that', 'which', 'where'],
+        choice: ['that', 'which', 'who'],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['who'],
+        unit: 'U4-2',
         starCount: 2,
         star: '★★☆☆☆',
-        explanation: 'student を説明しているので that が使えます。'
+        explanation: 'student は人なので who または that を使えます。'
     },
     {
         q_id: '24',
@@ -281,36 +284,41 @@ window.QUIZ_DATA = [
         q_id: '26',
         type: '全文並び替え',
         question: '語句を正しい順序に並び替えて英文を完成させよ。',
-        choice: ['new', 'that', 'The', 'in China', 'computer', 'is', 'made', 'was'],
+        choice: ['new', 'that', 'The', 'in China', 'computer', 'is', 'made', 'was', 'which'],
         answer: [2, 4, 1, 7, 6, 3, 5, 0],
         answerDisplay: 'The computer that was made in China is new.',
-        unit: 'U4-3',
+        acceptedAnswerSequences: [[2, 4, 8, 7, 6, 3, 5, 0]],
+        acceptedAnswerDisplays: ['The computer which was made in China is new.'],
+        unit: 'U4-1',
         starCount: 3,
         star: '★★★☆☆',
-        explanation: 'computer を that was made in China で説明し、その後に is new が続きます。'
+        explanation: 'computer は物なので which と that のどちらでも説明できます。'
     },
     {
         q_id: '27',
         type: '全文並び替え',
         question: '語句を正しい順序に並び替えて英文を完成させよ。',
-        choice: ['This', 'is', 'a', 'watch', 'that', 'was', 'made', 'in', 'Japan'],
+        choice: ['This', 'is', 'a', 'watch', 'that', 'was', 'made', 'in', 'Japan', 'which'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         answerDisplay: 'This is a watch that was made in Japan.',
-        unit: 'U4-3',
+        acceptedAnswerSequences: [[0, 1, 2, 3, 9, 5, 6, 7, 8]],
+        acceptedAnswerDisplays: ['This is a watch which was made in Japan.'],
+        unit: 'U4-1',
         starCount: 4,
         star: '★★★★☆',
-        explanation: 'watch の後ろに that was made in Japan を続けます。'
+        explanation: 'watch は物なので which と that のどちらでも説明できます。'
     },
     {
         q_id: '28',
-        type: '2択',
+        type: '3択',
         question: '次の（　）に入る最も適切な語を選べ。\nThe song (　) became popular last year is my favorite.',
-        choice: ['that', 'who'],
+        choice: ['that', 'who', 'which'],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['which'],
+        unit: 'U4-1',
         starCount: 1,
         star: '★☆☆☆☆',
-        explanation: 'song は物なので that が使えます。'
+        explanation: 'song は物なので which または that を使えます。'
     },
     {
         q_id: '29',
@@ -318,10 +326,11 @@ window.QUIZ_DATA = [
         question: '空欄に適切な語を書け。\nThe cake (　) my mother made was delicious.',
         choice: [],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['which'],
+        unit: 'U4-1',
         starCount: 2,
         star: '★★☆☆☆',
-        explanation: 'cake を説明する関係代名詞 that が入ります。'
+        explanation: 'cake は物なので which または that を使えます。'
     },
     {
         q_id: '30',
@@ -336,25 +345,27 @@ window.QUIZ_DATA = [
     },
     {
         q_id: '31',
-        type: '2択',
+        type: '3択',
         question: '次の（　）に入る最も適切な語を選べ。\nThis is a restaurant (　) serves Italian food.',
-        choice: ['that', 'who'],
+        choice: ['that', 'who', 'which'],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['which'],
+        unit: 'U4-1',
         starCount: 2,
         star: '★★☆☆☆',
-        explanation: 'restaurant は物として扱うので that を使います。'
+        explanation: 'restaurant は物・場所として扱うので which または that を使えます。'
     },
     {
         q_id: '32',
         type: '3択',
         question: '次の（　）に入る最も適切な語を選べ。\nThe player (　) scored three goals became famous.',
-        choice: ['that', 'which', 'where'],
+        choice: ['that', 'which', 'who'],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['who'],
+        unit: 'U4-2',
         starCount: 2,
         star: '★★☆☆☆',
-        explanation: 'player を説明する関係代名詞として that が使えます。'
+        explanation: 'player は人なので who または that を使えます。'
     },
     {
         q_id: '33',
@@ -362,10 +373,11 @@ window.QUIZ_DATA = [
         question: '空欄に適切な語を書け。\nThe movie (　) I watched yesterday was interesting.',
         choice: [],
         answer: 'that',
-        unit: 'U4-3',
+        acceptedAnswers: ['which'],
+        unit: 'U4-1',
         starCount: 2,
         star: '★★☆☆☆',
-        explanation: 'movie を説明する関係代名詞です。'
+        explanation: 'movie は物なので which または that を使えます。'
     },
     {
         q_id: '34',
@@ -373,46 +385,54 @@ window.QUIZ_DATA = [
         question: '語句を並び替えよ。\nThe pen ( that / my father / gave me ).',
         choice: ['that', 'my father', 'gave me'],
         answer: 'that my father gave me',
-        unit: 'U4-3',
+        acceptedAnswers: ['which my father gave me'],
+        acceptedChoiceSets: [['which', 'my father', 'gave me']],
+        unit: 'U4-1',
         starCount: 3,
         star: '★★★☆☆',
-        explanation: 'that my father gave me が pen を説明します。'
+        explanation: 'pen は物なので which my father gave me と that my father gave me のどちらでも正解です。'
     },
     {
         q_id: '35',
         type: '全文並び替え',
         question: '語句を正しい順序に並び替えて英文を完成させよ。',
-        choice: ['This', 'is', 'the', 'computer', 'that', 'I', 'use', 'every', 'day'],
+        choice: ['This', 'is', 'the', 'computer', 'that', 'I', 'use', 'every', 'day', 'which'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         answerDisplay: 'This is the computer that I use every day.',
-        unit: 'U4-3',
+        acceptedAnswerSequences: [[0, 1, 2, 3, 9, 5, 6, 7, 8]],
+        acceptedAnswerDisplays: ['This is the computer which I use every day.'],
+        unit: 'U4-1',
         starCount: 3,
         star: '★★★☆☆',
-        explanation: 'that I use every day が computer を説明しています。'
+        explanation: 'computer は物なので which と that のどちらでも説明できます。'
     },
     {
         q_id: '36',
         type: '全文並び替え',
         question: '語句を正しい順序に並び替えて英文を完成させよ。',
-        choice: ['is', 'The', 'interesting', 'that', 'like', 'book', 'I'],
+        choice: ['is', 'The', 'interesting', 'that', 'like', 'book', 'I', 'which'],
         answer: [1, 5, 3, 6, 4, 0, 2],
         answerDisplay: 'The book that I like is interesting.',
-        unit: 'U4-3',
+        acceptedAnswerSequences: [[1, 5, 7, 6, 4, 0, 2]],
+        acceptedAnswerDisplays: ['The book which I like is interesting.'],
+        unit: 'U4-1',
         starCount: 3,
         star: '★★★☆☆',
-        explanation: 'book を that I like で説明し、その後に is interesting が続きます。'
+        explanation: 'book は物なので which と that のどちらでも説明できます。'
     },
     {
         q_id: '37',
         type: '全文並び替え',
         question: '語句を正しい順序に並び替えて英文を完成させよ。',
-        choice: ['This', 'is', 'a', 'book', 'that', 'I', 'bought', 'yesterday'],
+        choice: ['This', 'is', 'a', 'book', 'that', 'I', 'bought', 'yesterday', 'which'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7],
         answerDisplay: 'This is a book that I bought yesterday.',
-        unit: 'U4-3',
+        acceptedAnswerSequences: [[0, 1, 2, 3, 8, 5, 6, 7]],
+        acceptedAnswerDisplays: ['This is a book which I bought yesterday.'],
+        unit: 'U4-1',
         starCount: 4,
         star: '★★★★☆',
-        explanation: 'book の後ろに that I bought yesterday を続けます。'
+        explanation: 'book は物なので which と that のどちらでも説明できます。'
     },
     {
         q_id: '38',
