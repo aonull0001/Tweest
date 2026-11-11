@@ -379,7 +379,7 @@
         &copy; 2026 英語U3-3・U4テスト対策
     </footer>
 
-    <script src="questions.js?v=2"></script>
+    <script src="questions.js?v=3"></script>
     <script>
   let allQuestions = Array.isArray(window.QUIZ_DATA) ? window.QUIZ_DATA : [];
   let activeQuestions = [];
@@ -490,46 +490,7 @@ document.getElementById('question-text').textContent = q.question;
 const answerArea = document.getElementById('answer-area');
 answerArea.innerHTML = '';
 if (isReorderType(q.type)) {
-  const tokens = getReorderChoices(q);
-  const instruction = document.createElement('p');
-  instruction.textContent = '語句を正しい順番で選んでください。';
-  answerArea.appendChild(instruction);
-  const sequence = document.createElement('p');
-  sequence.setAttribute('aria-live', 'polite');
-  sequence.textContent = '選択した順: ';
-  answerArea.appendChild(sequence);
-  const list = document.createElement('div');
-  list.className = 'choices-list';
-  const undoButton = document.createElement('button');
-  undoButton.type = 'button';
-  undoButton.className = 'btn btn-secondary';
-  undoButton.textContent = '最後の語句を戻す';
-  undoButton.disabled = true;
-
-  shuffleArray(tokens.map((text, index) => ({ text: text, index: index }))).forEach(option => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'choice-btn';
-    btn.textContent = option.text;
-    btn.dataset.optionIndex = String(option.index);
-    btn.addEventListener('click', function() {
-      selectedChoiceIndices.push(option.index);
-      btn.disabled = true;
-      sequence.textContent = '選択した順: ' + selectedChoiceIndices.map(index => tokens[index]).join(' ');
-      undoButton.disabled = false;
-    });
-    list.appendChild(btn);
-  });
-
-  undoButton.addEventListener('click', function() {
-    const lastIndex = selectedChoiceIndices.pop();
-    if (lastIndex === undefined) return;
-    const selectedButton = Array.from(list.children).find(button => Number(button.dataset.optionIndex) === lastIndex);
-    if (selectedButton) selectedButton.disabled = false;
-    sequence.textContent = '選択した順: ' + selectedChoiceIndices.map(index => tokens[index]).join(' ');
-    undoButton.disabled = selectedChoiceIndices.length === 0;
-  });
-  answerArea.append(list, undoButton);
+  renderReorderQuestion(q, answerArea);
 } else if (q.type === '2択' || q.type === '3択') {
   const list = document.createElement('div');
   list.className = 'choices-list';
@@ -565,11 +526,102 @@ feedbackArea.classList.remove('is-correct', 'is-wrong');
 document.getElementById('submit-btn').classList.remove('hidden');
 document.getElementById('next-btn').classList.add('hidden');
 }
+function renderReorderQuestion(question, answerArea) {
+const isWordSelection = question.type === '並び替え後単語選択';
+const tokens = isWordSelection ? question.choice : getReorderChoices(question);
+const correctSequences = isWordSelection
+  ? [tokens.map((_, index) => index)]
+  : getAcceptedReorderSequences(question, tokens);
+const selectionLimit = isWordSelection
+  ? tokens.length
+  : question.type === '部分並び替え'
+    ? question.choice.length
+    : correctSequences.length
+      ? Math.max(...correctSequences.map(sequence => sequence.length))
+      : tokens.length;
+const instruction = document.createElement('p');
+instruction.textContent = isWordSelection ? '語句のまとまりを正しい順番で選んでください。' : '語句を正しい順番で選んでください。';
+answerArea.appendChild(instruction);
+const sequence = document.createElement('p');
+sequence.setAttribute('aria-live', 'polite');
+sequence.textContent = '選択した順: ';
+answerArea.appendChild(sequence);
+const completedSentence = document.createElement('p');
+completedSentence.className = 'completed-sentence hidden';
+completedSentence.setAttribute('aria-live', 'polite');
+answerArea.appendChild(completedSentence);
+const input = document.createElement('input');
+input.type = 'text';
+input.id = 'text-answer-input';
+input.className = 'text-input hidden';
+input.placeholder = `${question.targetWordPosition}番目の単語を入力してください`;
+if (isWordSelection) answerArea.appendChild(input);
+const list = document.createElement('div');
+list.className = 'choices-list';
+const undoButton = document.createElement('button');
+undoButton.type = 'button';
+undoButton.className = 'btn btn-secondary';
+undoButton.textContent = '最後の語句を戻す';
+undoButton.disabled = true;
+const optionButtons = new Map();
+const updateSelection = function() {
+  sequence.textContent = '選択した順: ' + selectedChoiceIndices.map(index => tokens[index]).join(' ');
+  const complete = isWordSelection && selectedChoiceIndices.length === tokens.length;
+  completedSentence.textContent = complete ? `完成文: ${selectedChoiceIndices.map(index => tokens[index]).join(' ')}` : '';
+  completedSentence.classList.toggle('hidden', !complete);
+  if (isWordSelection) {
+    input.classList.toggle('hidden', !complete);
+    if (!complete) input.value = '';
+  }
+  optionButtons.forEach((button, index) => {
+    button.disabled = selectedChoiceIndices.includes(index) || selectedChoiceIndices.length >= selectionLimit;
+  });
+  undoButton.disabled = selectedChoiceIndices.length === 0;
+};
+shuffleReorderOptions(tokens.map((text, index) => ({ text: text, index: index })), correctSequences).forEach(option => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'choice-btn';
+  button.textContent = option.text;
+  button.dataset.optionIndex = String(option.index);
+  button.addEventListener('click', function() {
+    if (selectedChoiceIndices.length >= selectionLimit || selectedChoiceIndices.includes(option.index)) return;
+    selectedChoiceIndices.push(option.index);
+    updateSelection();
+  });
+  optionButtons.set(option.index, button);
+  list.appendChild(button);
+});
+undoButton.addEventListener('click', function() {
+  if (selectedChoiceIndices.length === 0) return;
+  selectedChoiceIndices.pop();
+  updateSelection();
+});
+answerArea.append(list, undoButton);
+}
 document.getElementById('submit-btn').addEventListener('click', function() {
 const q = activeQuestions[currentIndex];
 let userAns;
 let isCorrect;
-if (isReorderType(q.type)) {
+if (q.type === '並び替え後単語選択') {
+  if (selectedChoiceIndices.length !== q.choice.length) {
+    alert('英文を完成させるため、すべての語句のまとまりを選んでください。');
+    return;
+  }
+  const completedSentence = selectedChoiceIndices.map(index => q.choice[index]).join(' ');
+  const indexedWord = getEnglishWordAtPosition(completedSentence, q.targetWordPosition);
+  const input = document.getElementById('text-answer-input');
+  const response = input ? input.value.trim() : '';
+  if (!response) {
+    alert(`${q.targetWordPosition}番目の単語を入力してください。`);
+    return;
+  }
+  input.disabled = true;
+  userAns = `${completedSentence}（${q.targetWordPosition}番目: ${response}）`;
+  isCorrect = normalizeAnswer(completedSentence) === normalizeAnswer(q.answerDisplay)
+    && normalizeAnswer(indexedWord || '') === normalizeAnswer(q.answer)
+    && normalizeAnswer(response) === normalizeAnswer(indexedWord || '');
+} else if (isReorderType(q.type)) {
   const tokens = getReorderChoices(q);
   const allowedLengths = q.type === '部分並び替え'
     ? [q.choice.length]
@@ -695,7 +747,7 @@ resultView.classList.add('hidden');
 startView.classList.remove('hidden');
 });
 function isReorderType(type) {
-return type === '部分並び替え' || type === '全文並び替え' || type === '並び替え';
+return type === '部分並び替え' || type === '全文並び替え' || type === '並び替え' || type === '並び替え後単語選択';
 }
 function getReorderChoices(question) {
 if (Array.isArray(question.choice) && question.choice.length > 0) {
@@ -712,6 +764,9 @@ if (!question || !question.q_id || !supportedTypes.includes(question.type) || ty
 }
 if (!Array.isArray(question.choice) || typeof question.unit !== 'string' || !Number.isInteger(question.starCount) || question.starCount < 1 || question.starCount > 5 || typeof question.answer !== 'string' && !Array.isArray(question.answer)) {
   return `問題 ${question.q_id} の choice、unit、難易度、answer を確認してください。`;
+}
+if (isReorderType(question.type) && !question.question.includes('「')) {
+  return `問題 ${question.q_id} に日本語訳を追加してください。`;
 }
 if (question.type === '2択' || question.type === '3択') {
   const correctChoices = [question.answer].concat(question.acceptedAnswers || []);
@@ -763,6 +818,13 @@ if (question.type === '全文並び替え' || question.type === '並び替え') 
     return `問題 ${question.q_id} の並び替え順を answer に設定してください。`;
   }
 }
+if (question.type === '並び替え後単語選択') {
+  const words = getEnglishWords(question.answerDisplay || '');
+  const targetWord = getEnglishWordAtPosition(question.answerDisplay || '', question.targetWordPosition);
+  if (question.choice.length < 2 || question.choice.some(chunk => typeof chunk !== 'string' || !chunk.trim()) || !question.answerDisplay || !Number.isInteger(question.targetWordPosition) || question.targetWordPosition < 1 || !targetWord || normalizeAnswer(targetWord) !== normalizeAnswer(question.answer) || normalizeAnswer(question.choice.join(' ')) !== normalizeAnswer(question.answerDisplay) || words.length < question.targetWordPosition) {
+    return `問題 ${question.q_id} のチャンク、完成英文、または指定単語を確認してください。`;
+  }
+}
 if (question.acceptedAnswers && (!Array.isArray(question.acceptedAnswers) || question.acceptedAnswers.some(answer => typeof answer !== 'string' || !answer.trim()))) {
   return `問題 ${question.q_id} の別解を確認してください。`;
 }
@@ -783,6 +845,7 @@ if (Array.isArray(question.answer)) return question.answer.join(' ');
 return String(question.answer);
 }
 function getAnswerDisplay(question) {
+if (question.type === '並び替え後単語選択') return `${question.answerDisplay}（${question.targetWordPosition}番目: ${question.answer}）`;
 const answerDisplays = [getPrimaryAnswerDisplay(question)];
 if (question.acceptedAnswerDisplays) answerDisplays.push(...question.acceptedAnswerDisplays);
 else if (question.acceptedAnswers) answerDisplays.push(...question.acceptedAnswers);
@@ -791,6 +854,98 @@ return answerDisplays.join(' / ');
 function formatUserAnswer(question, answer) {
 if (!Array.isArray(answer)) return String(answer);
 return answer.join(isReorderType(question.type) ? ' ' : ', ');
+}
+function getAcceptedReorderSequences(question, tokens) {
+if (question.type === '部分並び替え') {
+  const sequences = [];
+  const acceptedAnswers = [question.answer].concat(question.acceptedAnswers || []);
+  const acceptedChoiceSets = question.acceptedChoiceSets || [];
+  acceptedAnswers.forEach((answer, answerIndex) => {
+    const choiceSet = answerIndex === 0 ? question.choice : acceptedChoiceSets[answerIndex - 1] || question.choice;
+    const offset = answerIndex === 0 || !acceptedChoiceSets[answerIndex - 1]
+      ? 0
+      : question.choice.length + acceptedChoiceSets.slice(0, answerIndex - 1).reduce((total, set) => total + set.length, 0);
+    sequences.push(...findTokenOrderSequences(answer, choiceSet, offset));
+  });
+  return sequences;
+}
+if (Array.isArray(question.answer) && question.answer.every(Number.isInteger)) {
+  return [question.answer].concat(question.acceptedAnswerSequences || []).map(sequence => sequence.slice());
+}
+const answerDisplays = [getPrimaryAnswerDisplay(question)].concat(question.acceptedAnswerDisplays || []);
+return answerDisplays.flatMap(answer => findTokenOrderSequences(answer, tokens));
+}
+function findTokenOrderSequences(answer, tokens, offset) {
+const target = normalizeAnswer(answer);
+const sequences = [];
+const used = new Set();
+function search(sequence, built) {
+  if (sequences.length >= 128 || !target.startsWith(built)) return;
+  if (built === target) {
+    sequences.push(sequence.slice());
+    return;
+  }
+  for (let index = 0; index < tokens.length; index++) {
+    if (used.has(index)) continue;
+    const next = normalizeAnswer(built ? `${built} ${tokens[index]}` : tokens[index]);
+    if (!target.startsWith(next)) continue;
+    used.add(index);
+    sequence.push(index + (offset || 0));
+    search(sequence, next);
+    sequence.pop();
+    used.delete(index);
+  }
+}
+search([], '');
+return sequences;
+}
+function hasVisibleCorrectOrder(options, correctSequences) {
+const visibleIndices = options.map(option => option.index);
+return correctSequences.some(sequence => {
+  let matched = 0;
+  visibleIndices.forEach(index => {
+    if (index === sequence[matched]) matched++;
+  });
+  return matched === sequence.length;
+});
+}
+function shuffleReorderOptions(options, correctSequences) {
+for (let attempt = 0; attempt < 30; attempt++) {
+  const shuffled = shuffleArray(options.slice());
+  if (!hasVisibleCorrectOrder(shuffled, correctSequences)) return shuffled;
+}
+const reversed = options.slice().reverse();
+if (!hasVisibleCorrectOrder(reversed, correctSequences)) return reversed;
+for (let index = 0; index < options.length - 1; index++) {
+  const candidate = options.slice();
+  [candidate[index], candidate[index + 1]] = [candidate[index + 1], candidate[index]];
+  if (!hasVisibleCorrectOrder(candidate, correctSequences)) return candidate;
+}
+const safeOrder = findSafeReorderOptions(options, correctSequences);
+if (safeOrder) return safeOrder;
+throw new Error('正解順を避ける選択肢の並びを作れません。問題データを確認してください。');
+}
+function findSafeReorderOptions(options, correctSequences) {
+let visited = 0;
+function search(order, remaining) {
+  if (++visited > 10000 || hasVisibleCorrectOrder(order, correctSequences)) return null;
+  if (remaining.length === 0) return order;
+  for (let index = 0; index < remaining.length; index++) {
+    const nextOrder = order.concat(remaining[index]);
+    const nextRemaining = remaining.slice(0, index).concat(remaining.slice(index + 1));
+    const safeOrder = search(nextOrder, nextRemaining);
+    if (safeOrder) return safeOrder;
+  }
+  return null;
+}
+return search([], options.slice());
+}
+function getEnglishWords(sentence) {
+return String(sentence).match(/[A-Za-z]+(?:['’][A-Za-z]+)*|\d+/g) || [];
+}
+function getEnglishWordAtPosition(sentence, position) {
+if (!Number.isInteger(position) || position < 1) return '';
+return getEnglishWords(sentence)[position - 1] || '';
 }
 function shuffleArray(arr) {
 for (let i = arr.length - 1; i > 0; i--) {

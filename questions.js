@@ -35,7 +35,7 @@ window.QUIZ_DATA = [
     {
         q_id: '4',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nI learned ( use / a computer / to / how ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「私はコンピューターの使い方を学びました。」\nI learned (　　　　).',
         choice: ['use', 'a computer', 'to', 'how'],
         answer: 'how to use a computer',
         unit: 'U3-3',
@@ -79,7 +79,7 @@ window.QUIZ_DATA = [
     {
         q_id: '8',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nThis is a book ( happy / made / which / me ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「これは私を幸せにした本です。」\nThis is a book (　　　　).',
         choice: ['happy', 'made', 'which', 'me'],
         answer: 'which made me happy',
         unit: 'U4-1',
@@ -101,7 +101,7 @@ window.QUIZ_DATA = [
     {
         q_id: '10',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「私は何を買えばよいかわかりません。」',
         choice: ['I', 'do', 'not', 'know', 'what', 'to', 'buy'],
         answer: [0, 1, 2, 3, 4, 5, 6],
         answerDisplay: 'I do not know what to buy.',
@@ -146,7 +146,7 @@ window.QUIZ_DATA = [
     {
         q_id: '14',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nI have a friend ( soccer / who / plays ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「私はサッカーをする友達がいます。」\nI have a friend (　　　　).',
         choice: ['soccer', 'who', 'plays'],
         answer: 'who plays soccer',
         unit: 'U4-2',
@@ -157,7 +157,7 @@ window.QUIZ_DATA = [
     {
         q_id: '15',
         type: '部分並び替え',
-        question: '語句を並び替えて英文を完成させよ。\nThe girl ( is singing / who ) is my cousin.',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「歌っている女の子は私のいとこです。」\nThe girl (　　　　) is my cousin.',
         choice: ['is singing', 'who'],
         answer: 'who is singing',
         unit: 'U4-2',
@@ -168,7 +168,7 @@ window.QUIZ_DATA = [
     {
         q_id: '16',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「親切な先生は人気があります。」',
         choice: ['popular', 'The', 'kind', 'is', 'teacher', 'is', 'who'],
         answer: [1, 4, 6, 3, 2, 5, 0],
         answerDisplay: 'The teacher who is kind is popular.',
@@ -180,7 +180,7 @@ window.QUIZ_DATA = [
     {
         q_id: '17',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「私は英語を上手に話す友達がいます。」',
         choice: ['I', 'have', 'a', 'friend', 'who', 'speaks', 'English', 'well'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7],
         answerDisplay: 'I have a friend who speaks English well.',
@@ -214,7 +214,7 @@ window.QUIZ_DATA = [
     {
         q_id: '20',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nThe woman ( who / in Osaka / lives ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「大阪に住んでいる女性」\nThe woman (　　　　).',
         choice: ['who', 'in Osaka', 'lives'],
         answer: 'who lives in Osaka',
         unit: 'U4-2',
@@ -261,7 +261,7 @@ window.QUIZ_DATA = [
     {
         q_id: '24',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nThis is a movie ( that / many people / like ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「多くの人が好きな映画」\nThis is a movie (　　　　).',
         choice: ['that', 'many people', 'like'],
         answer: 'that many people like',
         unit: 'U4-3',
@@ -283,7 +283,7 @@ window.QUIZ_DATA = [
     {
         q_id: '26',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「中国で作られたそのコンピューターは新しいです。」',
         choice: ['new', 'that', 'The', 'in China', 'computer', 'is', 'made', 'was', 'which'],
         answer: [2, 4, 1, 7, 6, 3, 5, 0],
         answerDisplay: 'The computer that was made in China is new.',
@@ -297,7 +297,7 @@ window.QUIZ_DATA = [
     {
         q_id: '27',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「これは日本で作られた時計です。」',
         choice: ['This', 'is', 'a', 'watch', 'that', 'was', 'made', 'in', 'Japan', 'which'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         answerDisplay: 'This is a watch that was made in Japan.',
@@ -335,7 +335,7 @@ window.QUIZ_DATA = [
     {
         q_id: '30',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nThe book ( that / I / bought yesterday ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「私が昨日買った本」\nThe book (　　　　).',
         choice: ['that', 'I', 'bought yesterday'],
         answer: 'that I bought yesterday',
         unit: 'U4-3',
@@ -382,7 +382,7 @@ window.QUIZ_DATA = [
     {
         q_id: '34',
         type: '部分並び替え',
-        question: '語句を並び替えよ。\nThe pen ( that / my father / gave me ).',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えよ。\n「父が私にくれたペン」\nThe pen (　　　　).',
         choice: ['that', 'my father', 'gave me'],
         answer: 'that my father gave me',
         acceptedAnswers: ['which my father gave me'],
@@ -395,7 +395,7 @@ window.QUIZ_DATA = [
     {
         q_id: '35',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「これは私が毎日使うコンピューターです。」',
         choice: ['This', 'is', 'the', 'computer', 'that', 'I', 'use', 'every', 'day', 'which'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         answerDisplay: 'This is the computer that I use every day.',
@@ -409,7 +409,7 @@ window.QUIZ_DATA = [
     {
         q_id: '36',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「私が好きな本は面白いです。」',
         choice: ['is', 'The', 'interesting', 'that', 'like', 'book', 'I', 'which'],
         answer: [1, 5, 3, 6, 4, 0, 2],
         answerDisplay: 'The book that I like is interesting.',
@@ -423,7 +423,7 @@ window.QUIZ_DATA = [
     {
         q_id: '37',
         type: '全文並び替え',
-        question: '語句を正しい順序に並び替えて英文を完成させよ。',
+        question: '次の日本語に合うように、語句を正しい順序に並び替えて英文を完成させよ。\n「これは私が昨日買った本です。」',
         choice: ['This', 'is', 'a', 'book', 'that', 'I', 'bought', 'yesterday', 'which'],
         answer: [0, 1, 2, 3, 4, 5, 6, 7],
         answerDisplay: 'This is a book that I bought yesterday.',
@@ -539,9 +539,11 @@ window.QUIZ_DATA = [
     {
         q_id: '46',
         type: '並び替え後単語選択',
-        question: '並び替えなさい。\n(I / know / where / to / buy / books)\n\n完成後、5番目の単語を答えなさい。',
-        choice: [],
+        question: '次の日本語に合うように、英文を並び替えなさい。\n「私はどこで本を買えばよいか知っています。」\n\n完成後、5番目の単語を答えなさい。',
+        choice: ['I know', 'where to buy', 'books.'],
         answer: 'buy',
+        answerDisplay: 'I know where to buy books.',
+        targetWordPosition: 5,
         unit: 'U3-3',
         starCount: 3,
         star: '★★★☆☆',
@@ -550,9 +552,11 @@ window.QUIZ_DATA = [
     {
         q_id: '47',
         type: '並び替え後単語選択',
-        question: '並び替えなさい。\n(a / who / friend / basketball / plays / have / I)\n\n完成後、6番目の単語を答えなさい。',
-        choice: [],
+        question: '次の日本語に合うように、英文を並び替えなさい。\n「私はバスケットボールをする友達がいます。」\n\n完成後、6番目の単語を答えなさい。',
+        choice: ['I have', 'a friend', 'who plays', 'basketball.'],
         answer: 'plays',
+        answerDisplay: 'I have a friend who plays basketball.',
+        targetWordPosition: 6,
         unit: 'U4-2',
         starCount: 3,
         star: '★★★☆☆',
