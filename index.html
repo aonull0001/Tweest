@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f7f2">
+    <meta name="description" content="英語U3-3・U4のテスト対策ページ。関係代名詞や how to のポイントを確認して、問題演習に挑戦しよう。">
+    <title>英語U3-3・U4テスト対策</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: light; --ink: #25322f; --muted: #64716c; --green: #245b4a; --green-dark: #194538; --mint: #e6f0e9; --paper: #fffefa; --line: #e4e9e1; --accent: #d98b59; }
+        * { box-sizing: border-box; }
+        body { margin: 0; color: var(--ink); background: #f6f7f2; font-family: "Zen Kaku Gothic New", sans-serif; line-height: 1.8; }
+        a { color: inherit; }
+        .site-header { display: flex; justify-content: space-between; align-items: center; width: min(1120px, calc(100% - 48px)); margin: 0 auto; padding: 22px 0; }
+        .brand { color: var(--green); font-size: 15px; font-weight: 900; letter-spacing: .04em; text-decoration: none; }
+        .header-note { color: var(--muted); font-size: 13px; }
+        main { overflow: hidden; }
+        .hero { position: relative; padding: 74px 24px 80px; background: var(--mint); }
+        .hero::after { position: absolute; right: max(4%, calc((100% - 1120px) / 2)); bottom: -48px; width: 220px; height: 220px; border: 1px solid rgba(36, 91, 74, .15); border-radius: 50%; content: ""; pointer-events: none; }
+        .hero-inner, .content { width: min(960px, 100%); margin: 0 auto; }
+        .eyebrow { display: inline-flex; align-items: center; gap: 9px; margin: 0 0 16px; color: var(--green); font-size: 13px; font-weight: 700; letter-spacing: .1em; }
+        .eyebrow::before { width: 24px; height: 2px; background: var(--accent); content: ""; }
+        h1 { max-width: 720px; margin: 0; font-size: clamp(32px, 6vw, 56px); font-weight: 900; letter-spacing: .025em; line-height: 1.35; }
+        .hero-copy { max-width: 600px; margin: 20px 0 28px; color: #485852; font-size: 16px; }
+        .primary-link { display: inline-flex; justify-content: center; align-items: center; gap: 14px; min-height: 56px; padding: 12px 24px; border-radius: 8px; background: var(--green); color: white; font-size: 15px; font-weight: 700; text-decoration: none; transition: background-color .18s, transform .18s; }
+        .primary-link:hover { transform: translateY(-2px); background: var(--green-dark); }
+        .primary-link:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+        .arrow { font-size: 20px; line-height: 1; }
+        .content { padding: 68px 24px 76px; }
+        .section-heading { margin-bottom: 24px; }
+        .section-heading h2 { margin: 0; font-size: 25px; font-weight: 900; }
+        .section-heading p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
+        .topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .topic-card { min-height: 156px; padding: 22px 24px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }
+        .topic-unit { display: inline-block; margin-bottom: 8px; padding: 2px 10px; border-radius: 99px; background: var(--mint); color: var(--green); font-size: 12px; font-weight: 700; }
+        .topic-card h3 { margin: 0 0 5px; font-size: 17px; font-weight: 700; }
+        .topic-card p { margin: 0; color: var(--muted); font-size: 14px; }
+        .study-note { display: grid; grid-template-columns: auto 1fr; gap: 16px; margin-top: 40px; padding: 22px 24px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: #fff8f1; }
+        .study-note-mark { color: var(--accent); font-size: 21px; font-weight: 900; }
+        .study-note strong { display: block; margin-bottom: 3px; }
+        .study-note p { margin: 0; color: #58625d; font-size: 14px; }
+        footer { padding: 22px 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; text-align: center; }
+        @media (max-width: 600px) {
+            .site-header { width: calc(100% - 36px); padding: 17px 0; }
+            .header-note { max-width: 115px; text-align: right; line-height: 1.5; }
+            .hero { padding: 56px 18px 62px; }
+            .hero::after { right: -100px; bottom: -95px; width: 190px; height: 190px; }
+            .hero-copy { font-size: 15px; }
+            .content { padding: 50px 18px 58px; }
+            .topic-grid { grid-template-columns: 1fr; gap: 12px; }
+            .topic-card { min-height: auto; padding: 18px 20px; }
+            .study-note { margin-top: 28px; padding: 18px; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html">ENGLISH TEST PREP</a>
+        <span class="header-note">中学英語・定期テスト対策</span>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="hero-inner">
+                <p class="eyebrow">ENGLISH · UNIT 3–4</p>
+                <h1>英語U3-3・U4<br>テスト対策</h1>
+                <p class="hero-copy">大切な文法ポイントをおさらいしたら、問題演習に挑戦。自分のペースで理解を深めていきましょう。</p>
+                <a class="primary-link" href="quiz.html">英語U3-3・U4テスト対策ページへ <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
+        </section>
+        <section class="content" aria-labelledby="topics-title">
+            <div class="section-heading">
+                <h2 id="topics-title">今回の学習内容</h2>
+                <p>出題範囲の文法ポイントを確認しましょう。</p>
+            </div>
+            <div class="topic-grid">
+                <article class="topic-card"><span class="topic-unit">U3-3</span><h3>how to ＋ 動詞</h3><p>「〜する方法」を表す how to の使い方。</p></article>
+                <article class="topic-card"><span class="topic-unit">U4-1</span><h3>関係代名詞 which</h3><p>人以外を説明する which と、受け身の文。</p></article>
+                <article class="topic-card"><span class="topic-unit">U4-2</span><h3>関係代名詞 who</h3><p>人を説明する who の使い方。</p></article>
+                <article class="topic-card"><span class="topic-unit">U4-3</span><h3>関係代名詞 that</h3><p>that が使われる場合と、who との使い分け。</p></article>
+            </div>
+            <aside class="study-note">
+                <span class="study-note-mark" aria-hidden="true">!</span>
+                <div><strong>問題演習について</strong><p>選択式・複数選択・並び替え・○×・記述式の問題を収録しています。解答後に正解と解説を確認できます。</p></div>
+            </aside>
+        </section>
+    </main>
+    <footer>&copy; 2026 英語U3-3・U4テスト対策</footer>
+</body>
+</html>
